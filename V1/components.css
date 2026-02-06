@@ -1,0 +1,12 @@
+/* Shared UI components */
+.card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 10px 24px rgba(0,0,0,0.06) }
+.button { height: 40px; min-width: 48px; padding: 0 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: #ffffff; box-shadow: 0 6px 16px rgba(0,0,0,0.06); cursor: pointer; font-size: 16px; color: #0f172a }
+.button[disabled] { opacity: 0.5; cursor: not-allowed }
+.shadow { box-shadow: 0 10px 24px rgba(0,0,0,0.06) }
+.shadow-lg { box-shadow: 0 16px 32px rgba(0,0,0,0.08) }
+.rounded { border-radius: 16px }
+
+/* Section spacing utilities */
+.section-sm { margin: 12px 0 }
+.section { margin: 24px 0 }
+.section-lg { margin: 36px 0 }

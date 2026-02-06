@@ -1,0 +1,27 @@
+/* Global minimalist styling and reset */
+* { box-sizing: border-box }
+html, body { height: 100% }
+body { margin: 0; background: #f7f7f8; color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, Inter, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif }
+
+/* Layout spacing system */
+.container { max-width: 960px; margin: 48px auto; padding: 0 24px }
+.section { margin: 24px 0 }
+.center { text-align: center }
+
+/* Typography */
+h1 { font-weight: 400; letter-spacing: 0.2px; color: #0b1220 }
+h2, h3 { font-weight: 500 }
+p { color: #6b7280 }
+
+/* Shared shadows and rounded */
+.shadow { box-shadow: 0 10px 24px rgba(0,0,0,0.06) }
+.shadow-lg { box-shadow: 0 16px 32px rgba(0,0,0,0.08) }
+.rounded { border-radius: 16px }
+
+/* Shared card styles */
+.card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 10px 24px rgba(0,0,0,0.06) }
+
+/* Buttons */
+.button { height: 40px; min-width: 48px; padding: 0 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: #ffffff; box-shadow: 0 6px 16px rgba(0,0,0,0.06); cursor: pointer; font-size: 16px; color: #0f172a }
+.button[disabled] { opacity: 0.5; cursor: not-allowed }
+.button:hover { background: #f9fafb }

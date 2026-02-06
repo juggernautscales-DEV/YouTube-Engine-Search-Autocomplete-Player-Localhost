@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube Player</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="./search.css">
+  <link rel="stylesheet" href="./player.css">
+  <style>
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body { margin: 0; background: #f7f7f8; color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, Inter, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif }
+    .wrap { max-width: 960px; margin: 48px auto; padding: 0 24px }
+    .header { text-align: center; margin-bottom: 24px }
+    .header h1 { margin: 0; font-weight: 400; letter-spacing: 0.2px; color: #0b1220 }
+
+    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: 0 10px 24px rgba(0,0,0,0.06) }
+    .search { padding: 16px; margin-bottom: 20px }
+    .input-wrap { position: relative }
+    .input-wrap input { width: 100%; height: 44px; border: 1px solid #e5e7eb; border-radius: 14px; outline: none; padding: 0 48px 0 16px; font-size: 16px; background: #fbfbfc }
+    .input-wrap input:focus { border-color: #d1d5db; background: #ffffff }
+    .input-wrap button { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); height: 32px; width: 44px; border: 1px solid #e5e7eb; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer }
+    .suggestions { position: absolute; left: 0; right: 0; top: calc(100% + 6px); background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); padding: 6px 0; display: none; z-index: 10 }
+    .suggestions li { list-style: none; padding: 8px 12px; cursor: pointer; font-size: 15px }
+    .suggestions li:hover { background: #f3f4f6 }
+
+    .player-section { margin: 24px 0 }
+    .player-wrap { position: relative; width: 100%; max-width: 960px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 16px 32px rgba(0,0,0,0.08); background: #000000 }
+    .player-wrap::before { content: ""; display: block; padding-top: 56.25% }
+    #player { position: absolute; inset: 0 }
+    #player iframe { width: 100%; height: 100% }
+
+    .controls { padding: 16px; margin: 24px 0 }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 16px }
+    .control { height: 40px; min-width: 48px; padding: 0 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: #ffffff; box-shadow: 0 6px 16px rgba(0,0,0,0.06); cursor: pointer; font-size: 18px }
+    .control[disabled] { opacity: 0.5; cursor: not-allowed }
+    .volume { width: 220px; accent-color: #111827 }
+
+    .results { padding: 8px 8px 4px 8px; margin-top: 8px; max-height: 50vh; overflow-y: auto }
+    #results { list-style: none; margin: 0; padding: 0 }
+    .result { display: flex; align-items: flex-start; gap: 12px; padding: 10px; border: 1px solid #e5e7eb; border-radius: 14px; background: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 10px; cursor: pointer }
+    .result:hover { background: #f9fafb }
+    .result img { border-radius: 10px; flex: 0 0 auto }
+    .info { display: flex; flex-direction: column; overflow: hidden }
+    .title { font-weight: 600; color: #0f172a; white-space: nowrap; text-overflow: ellipsis; overflow: hidden }
+    .channel { font-weight: 400; color: #6b7280; font-size: 14px }
+    .desc { color: #4b5563; font-size: 14px; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+  </style>
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' https://www.youtube.com https://s.ytimg.com https://www.googleapis.com; connect-src https://www.googleapis.com https://www.youtube.com https://s.ytimg.com https://suggestqueries.google.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com;">
+  <link rel="preconnect" href="https://www.youtube.com">
+  <link rel="preconnect" href="https://www.googleapis.com">
+</head>
+<body>
+  <div class="wrap">
+    <header class="header">
+      <h1>YouTube Player</h1>
+    </header>
+
+    <section class="card search">
+      <form id="search-form">
+        <div class="input-wrap">
+          <input id="query" type="text" placeholder="Search YouTube" aria-label="Search YouTube">
+          <button id="search-btn" type="submit" aria-label="Search">🔎</button>
+          <ul id="suggestions" class="suggestions"></ul>
+        </div>
+      </form>
+    </section>
+
+    <section class="player-section">
+      <div class="player-wrap">
+        <div id="player"></div>
+      </div>
+    </section>
+
+    <section class="card controls">
+      <div class="controls-row">
+        <button id="prev" class="control" aria-label="Previous">◀︎</button>
+        <button id="toggle" class="control" aria-label="Play/Pause">⏯</button>
+        <button id="next" class="control" aria-label="Next">▶︎</button>
+        <input id="volume" class="volume" type="range" min="0" max="100" value="50" aria-label="Volume">
+      </div>
+    </section>
+
+    <section class="card results">
+      <ul id="results"></ul>
+    </section>
+  </div>
+
+  <script type="module" src="./utils.js"></script>
+  <script type="module" src="./api.js"></script>
+  <script type="module" src="./engine.js"></script>
+</body>
+</html>
